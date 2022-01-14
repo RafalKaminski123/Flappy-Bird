@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PipiesController : MonoBehaviour
+public class PipesController : MonoBehaviour
 {
     public GameObject prefab;
     public float spawnRate = 1f;

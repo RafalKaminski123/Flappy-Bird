@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PipiesMovement : MonoBehaviour
+public class PipesMovement : MonoBehaviour
 {
     public float speed = 5f;
     private float leftEdge;
+    private float rightEdge;
 
 
     private void Start()
     {
         leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x -1f;
+        rightEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x + 1f;
     }
     private void Update()
     {

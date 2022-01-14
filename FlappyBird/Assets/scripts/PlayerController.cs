@@ -23,8 +23,13 @@ public class PlayerController : MonoBehaviour
     {
         InvokeRepeating(nameof(AnimateSprite), 0.15f, 0.15f);
     }
-        
 
+    private void OnEnable()
+    {
+        Vector3 position = transform.position;
+        position.y = 0f;
+
+    }
 
     private void Update()
     {
@@ -43,6 +48,9 @@ public class PlayerController : MonoBehaviour
             }
             direction.y += gravity * Time.deltaTime;
             transform.position += direction * Time.deltaTime;
+
+
+
         }
     }
 
