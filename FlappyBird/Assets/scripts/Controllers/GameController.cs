@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
     private int score;
     public GameObject playButton;
     public GameObject gameOver;
+    public GameObject scoreBoard;
 
     
 

@@ -7,6 +7,8 @@ public class BackToMenu : MonoBehaviour
 {
     public GameObject toMenu;
     public GameObject tryAgain;
+    
+  
 
     public void ToMenu()
     {
@@ -17,4 +19,7 @@ public class BackToMenu : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene");
     }
+
+  
+
 }

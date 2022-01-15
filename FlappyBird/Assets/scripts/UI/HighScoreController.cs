@@ -5,9 +5,18 @@ using UnityEngine.UI;
 
 public class HighScoreController : MonoBehaviour
 {
-    
+    [SerializeField] HighScoreUI highScoreUI;
 
     int highscore;
+
+    public int Highscore
+    {
+        set
+        {
+            highscore = value;
+            highScoreUI.SetHighscore(value);
+        }
+    }
 
     private void Start()
     {
@@ -16,7 +25,7 @@ public class HighScoreController : MonoBehaviour
 
     private void SetLatestHighscore()
     {
-        highscore = PlayerPrefs.GetInt("HighScore", 0);
+        Highscore = PlayerPrefs.GetInt("HighScore", 0);
         
     }
 
@@ -29,8 +38,9 @@ public class HighScoreController : MonoBehaviour
     {
         if(score >highscore)
         {
-            highscore = score;
+            Highscore = score;
             SaveHighScore(score);
+            
         }
     }
 }
