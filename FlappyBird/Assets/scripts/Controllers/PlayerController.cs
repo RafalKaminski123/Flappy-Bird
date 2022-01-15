@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     public Sprite[] sprites;
     private int spriteIndex;
+    public PointsCounter pointsCount;
    
 
     private void Awake()
@@ -67,13 +68,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.tag == "Obstacle")
+        if (other.gameObject.tag == "Obstacle")
         {
             FindObjectOfType<GameController>().GameOver();
         }
-        else if(other.gameObject.tag == "Scoring")
+        else if (other.gameObject.tag == "Scoring")
         {
-            FindObjectOfType<GameController>().IncreaseScore();
+            FindObjectOfType<PointHUD>().UpdateHUD();
         }
     }
 

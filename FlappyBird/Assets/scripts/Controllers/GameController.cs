@@ -7,12 +7,16 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
+    //[SerializeField] PointsCounter pointCounter;
+    [SerializeField] HighScoreController highScoreController;
+    [SerializeField] PointHUD pointHUD;
+
     public PlayerController player;
     private int score;
-    public Text scoreText;
-    public Text endScore;
     public GameObject playButton;
     public GameObject gameOver;
+
+    
 
     private void Awake()
     {
@@ -22,21 +26,11 @@ public class GameController : MonoBehaviour
     public void Play()
     {
         score = 0;
-        scoreText.text = score.ToString();
         playButton.SetActive(false);
         gameOver.SetActive(false);
         Time.timeScale = 1f;
         player.enabled = true;
         PipesController[] pipes = FindObjectsOfType<PipesController>();
-
-       
-        
-        
-        //for (int i = 0; i < pipes.Length; i++)
-        //{
-        //    Destroy(pipes[i].gameObject);
-        //}
-
     }
 
     private void Pause()
@@ -50,14 +44,10 @@ public class GameController : MonoBehaviour
     {
         gameOver.SetActive(true);
         playButton.SetActive(true);
-        
         Pause();
+        highScoreController.SetHighScoreIfGreater(pointHUD.Score);
     }
 
-    public void IncreaseScore()
-    {
-        score++;
-        scoreText.text = score.ToString();
-        endScore.text = score.ToString();
-    }
+
+   
 }
