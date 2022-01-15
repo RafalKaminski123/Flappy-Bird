@@ -7,10 +7,6 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    //[SerializeField] PointsCounter pointCounter;
-    [SerializeField] HighScoreController highScoreController;
-    [SerializeField] PointHUD pointHUD;
-
     public PlayerController player;
     private int score;
     public GameObject playButton;
@@ -46,9 +42,9 @@ public class GameController : MonoBehaviour
         gameOver.SetActive(true);
         playButton.SetActive(true);
         Pause();
-        highScoreController.SetHighScoreIfGreater(pointHUD.Score);
+        
     }
-
+    
 
    
 }

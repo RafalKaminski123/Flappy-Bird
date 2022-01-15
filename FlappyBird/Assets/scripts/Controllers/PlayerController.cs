@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    
     private Rigidbody2D player;
     private Vector3 direction;
     public float gravity = -9f;

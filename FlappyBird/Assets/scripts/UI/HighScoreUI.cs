@@ -5,11 +5,28 @@ using UnityEngine.UI;
 
 public class HighScoreUI : MonoBehaviour
 {
-    [SerializeField] Text highscoreText;
+    [SerializeField] GameObject highscoreUIElementPrefab;
+    [SerializeField] Transform elementWrapper;
 
-    public void SetHighscore(int score)
+    List<GameObject> uiElements = new List<GameObject>();
+
+    private void UpdateUI(List<HighScoreElements> list)
     {
-        highscoreText.text = score.ToString();
-    }
+        for( int i = 0; i < list.Count; i++)
+        {
+            HighScoreElements element = list[i];
 
+            if(element.points > 0)
+            {
+                if(i >= uiElements.Count)
+                {
+                    var inst = Instantiate(highscoreUIElementPrefab, Vector3.zero, Quaternion.identity);
+                    inst.transform.SetParent(elementWrapper, false);
+                    uiElements.Add(inst);
+                }
+
+                var texts = uiElements[i].GetComponentsInChildren<Text>();
+            }
+        }
+    }
 }
