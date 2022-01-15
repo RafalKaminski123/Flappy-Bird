@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class GameController : MonoBehaviour
@@ -9,6 +10,7 @@ public class GameController : MonoBehaviour
     public PlayerController player;
     private int score;
     public Text scoreText;
+    public Text endScore;
     public GameObject playButton;
     public GameObject gameOver;
 
@@ -27,10 +29,13 @@ public class GameController : MonoBehaviour
         player.enabled = true;
         PipesController[] pipes = FindObjectsOfType<PipesController>();
 
-        for (int i = 0; i < pipes.Length; i++)
-        {
-            Destroy(pipes[i].gameObject);
-        }
+       
+        
+        
+        //for (int i = 0; i < pipes.Length; i++)
+        //{
+        //    Destroy(pipes[i].gameObject);
+        //}
 
     }
 
@@ -45,6 +50,7 @@ public class GameController : MonoBehaviour
     {
         gameOver.SetActive(true);
         playButton.SetActive(true);
+        
         Pause();
     }
 
@@ -52,5 +58,6 @@ public class GameController : MonoBehaviour
     {
         score++;
         scoreText.text = score.ToString();
+        endScore.text = score.ToString();
     }
 }
