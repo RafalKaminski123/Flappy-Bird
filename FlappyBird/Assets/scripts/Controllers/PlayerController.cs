@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public Sprite[] sprites;
     private int spriteIndex;
     public PointsCounter pointsCount;
+    public PointHUD pointHUD;
 
     private float startTime;
     private float currentTime;
@@ -81,7 +82,16 @@ public class PlayerController : MonoBehaviour
             if (touchResult == Result.Tap)
                 direction = Vector3.up * force;
             else if (touchResult == Result.DoubleTap)
-                FindObjectOfType<PipesController>().DestroyPipes();
+            {
+                //if (pointHUD.Bomb == 0)
+                //{
+                //    direction = Vector3.up * force;
+                //}
+                //else 
+                //{
+                    FindObjectOfType<PipesController>().DestroyPipes();
+                //}
+            }
 
             touchResult = Result.Idle;
             inputState = InputState.NoInput;
@@ -130,6 +140,7 @@ public class PlayerController : MonoBehaviour
         {
             FindObjectOfType<PointHUD>().UpdateHUD();
         }
+        
     }
 
 

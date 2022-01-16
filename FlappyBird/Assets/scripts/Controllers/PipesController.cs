@@ -8,7 +8,7 @@ public class PipesController : MonoBehaviour
     public float spawnRate = 1f;
     public float minHeight = -1f;
     public float maxHeight = 1f;
-
+   
     public List<GameObject> pipesContainer = new List<GameObject>();
 
     
@@ -33,10 +33,17 @@ public class PipesController : MonoBehaviour
     {
         for(int i = pipesContainer.Count -1; i >=0; i--)
         {
-            var obj = pipesContainer[i];
-            pipesContainer.Remove(obj);
-            Destroy(obj);
+           
+                var obj = pipesContainer[i];
+                pipesContainer.Remove(obj);
+                Destroy(obj);
+
         }
+
+
+
+
+
     }
 
 
