@@ -8,9 +8,9 @@ public class HighScoreUI : MonoBehaviour
     [SerializeField] GameObject highscoreUIElementPrefab;
     [SerializeField] Transform elementWrapper;
 
-    List<GameObject> uiElements = new List<GameObject>();
+   public List<GameObject> uiElements = new List<GameObject>();
 
-    private void UpdateUI(List<HighScoreElements> list)
+    public void UpdateUI(List<HighScoreElements> list)
     {
         for( int i = 0; i < list.Count; i++)
         {
@@ -26,6 +26,8 @@ public class HighScoreUI : MonoBehaviour
                 }
 
                 var texts = uiElements[i].GetComponentsInChildren<Text>();
+                texts[0].text = element.gameOne;
+                texts[1].text = element.points.ToString();
             }
         }
     }

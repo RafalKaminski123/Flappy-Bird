@@ -13,7 +13,9 @@ public class GameController : MonoBehaviour
     public GameObject gameOver;
     public GameObject scoreBoard;
 
-    
+    public PointsController pointsController;
+    public HighScoreUI ui;
+
 
     private void Awake()
     {
@@ -42,9 +44,7 @@ public class GameController : MonoBehaviour
         gameOver.SetActive(true);
         playButton.SetActive(true);
         Pause();
-        
+        pointsController.StopGame();
+        ui.UpdateUI(pointsController.hsc.highscoreList);
     }
-    
-
-   
 }

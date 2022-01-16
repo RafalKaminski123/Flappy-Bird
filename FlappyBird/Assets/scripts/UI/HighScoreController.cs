@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HighScoreController : MonoBehaviour
 {
-    List<HighScoreElements> highscoreList = new List<HighScoreElements>();
+    public List<HighScoreElements> highscoreList = new List<HighScoreElements>();
     [SerializeField] int maxCount = 5;
     [SerializeField] string filename;
 
@@ -18,7 +18,7 @@ public class HighScoreController : MonoBehaviour
     {
         highscoreList = FileController.ReadListFromJSON<HighScoreElements>(filename);
 
-        while(highscoreList.Count > maxCount)
+        while (highscoreList.Count > maxCount)
         {
             highscoreList.RemoveAt(maxCount);
         }
@@ -31,86 +31,35 @@ public class HighScoreController : MonoBehaviour
 
     public void AddHighscoreIfPossible(HighScoreElements element)
     {
-        for(int i = 0; i < maxCount; i ++)
+        if (highscoreList.Count > 0)
         {
-            if(i > highscoreList.Count || element.points > highscoreList[i].points)
+            for (int i = 0; i < maxCount; i++)
             {
-                highscoreList.Insert(i, element);
-
-                while (highscoreList.Count > maxCount)
+                if (i >= highscoreList.Count)
                 {
-                    highscoreList.RemoveAt(maxCount);
+                    highscoreList.Add(element);
+                    break;
                 }
-                SaveHighscore();
-                break;
+
+                if (element.points > highscoreList[i].points)
+                {
+                    highscoreList.Insert(i, element);
+
+                    while (highscoreList.Count > maxCount)
+                    {
+                        highscoreList.RemoveAt(maxCount);
+                    }
+                    SaveHighscore();
+
+
+                    break;
+                }
             }
         }
+        else
+        {
+            highscoreList.Add(element);
+            SaveHighscore();
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //int highscore;
-
-    //public int Highscore
-    //{
-    //    set
-    //    {
-    //        highscore = value;
-    //        highScoreUI.SetHighscore(value);
-    //    }
-    //}
-
-    //private void Start()
-    //{
-    //    SetLatestHighscore();
-    //}
-
-    //private void SetLatestHighscore()
-    //{
-    //    Highscore = PlayerPrefs.GetInt("HighScore", 0);
-        
-    //}
-
-    //private void SaveHighScore(int score)
-    //{
-    //    PlayerPrefs.SetInt("HighScore", score);
-    //}
-
-    //public void SetHighScoreIfGreater(int score)
-    //{
-    //    if(score >highscore)
-    //    {
-    //        Highscore = score;
-    //        SaveHighScore(score);
-            
-    //    }
-    //}
 }

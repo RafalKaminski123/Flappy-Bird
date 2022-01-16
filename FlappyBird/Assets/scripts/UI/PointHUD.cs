@@ -9,6 +9,7 @@ public class PointHUD : MonoBehaviour
     [SerializeField] Text endScore;
 
     int score = -1;
+    
 
 
     private void Awake()
@@ -36,6 +37,15 @@ public class PointHUD : MonoBehaviour
         score++;
         scoreCount.text = score.ToString();
         endScore.text = score.ToString();
+
+
+        //if (score % 10 == 0)
+        //{
+        //    if (bombCounter < 3)
+        //    {
+        //        bombCounter++;
+        //    }
+        //}
 
     }
 
