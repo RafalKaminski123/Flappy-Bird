@@ -1,32 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-    public enum Result
+    private enum Result
     {
         Idle,
         Tap,
         DoubleTap,
     }
 
-    public enum InputState
+    private enum InputState
     {
         NoInput,
         Waiting,
         Performed,
     }
 
-    private Rigidbody2D player;
-    private Vector3 direction;
-    public float gravity = -9f;
-    public float force = 5f;
+    private bool isEnabled;
+    private UnityAction onObstacleHit;
+    private UnityAction onScoreColliderHit;
+    
     private SpriteRenderer spriteRenderer;
     public Sprite[] sprites;
+    private Vector3 direction;
+    
+    public float gravity = -9f;
+    public float force = 5f;
     private int spriteIndex;
-    public PointsCounter pointsCount;
-    public PointHUD pointHUD;
 
     private float startTime;
     private float currentTime;
@@ -37,7 +38,6 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
@@ -45,16 +45,40 @@ public class PlayerController : MonoBehaviour
     {
         InvokeRepeating(nameof(AnimateSprite), 0.15f, 0.15f);
     }
-
-    private void OnEnable()
+    
+    public void OnObstacleHitAddListener(UnityAction callback)
     {
-        Vector3 position = transform.position;
-        position.y = 0f;
-
+        onObstacleHit += callback;
     }
 
-    private void Update()
+    public void OnScoreColliderHitAddListener(UnityAction callback)
     {
+        onScoreColliderHit += callback;
+    }
+
+    public void RemoveAllListener()
+    {
+        onObstacleHit = null;
+        onScoreColliderHit = null;
+    }
+    
+    public void EnableController()
+    {
+        isEnabled = true;
+        Vector3 position = transform.position;
+        position.y = 0f;
+    }
+
+    public void DisableController()
+    {
+        isEnabled = false;
+    }
+
+    public void UpdateController(PointsController pointsController, PipesController pipesController)
+    {
+        if (!isEnabled)
+            return;
+        
         if (inputState == InputState.Waiting)
         {
             currentTime = (Time.time - startTime) / duration;
@@ -79,18 +103,18 @@ public class PlayerController : MonoBehaviour
 
         if (touchResult != Result.Idle)
         {
-            if (touchResult == Result.Tap)
-                direction = Vector3.up * force;
-            else if (touchResult == Result.DoubleTap)
+            if (pointsController.Bombs == 0 && touchResult == Result.DoubleTap)
+                touchResult = Result.Tap;
+            
+            switch (touchResult)
             {
-                //if (pointHUD.Bomb == 0)
-                //{
-                //    direction = Vector3.up * force;
-                //}
-                //else 
-                //{
-                    FindObjectOfType<PipesController>().DestroyPipes();
-                //}
+                case Result.Tap:
+                    direction = Vector3.up * force;
+                    break;
+                case Result.DoubleTap:
+                    pipesController.DestroyPipes();
+                    pointsController.RemoveBomb();
+                    break;
             }
 
             touchResult = Result.Idle;
@@ -132,17 +156,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Obstacle")
+        if (other.gameObject.CompareTag("Obstacle"))
         {
-            FindObjectOfType<GameController>().GameOver();
+            onObstacleHit?.Invoke();
         }
-        else if (other.gameObject.tag == "Scoring")
+        else if (other.gameObject.CompareTag("Scoring"))
         {
-            FindObjectOfType<PointHUD>().UpdateHUD();
+           onScoreColliderHit.Invoke();
         }
-        
     }
-
-
 }
 

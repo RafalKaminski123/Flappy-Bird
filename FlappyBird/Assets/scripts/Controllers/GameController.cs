@@ -1,49 +1,65 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-    public PlayerController player;
-    private int score;
-    public GameObject playButton;
-    public GameObject gameOver;
-    public GameObject scoreBoard;
-
-    public PointsController pointsController;
-    public HighScoreUI ui;
-
+    [SerializeField] private GameView gameView;
+    [SerializeField] private ScoreboardView scoreboardView;
+    [SerializeField] private PauseView pauseView;
+    [SerializeField] private GameOverView gameOverView;
+    [SerializeField] private PointsController pointsController;
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private PipesController pipesController;
+    [SerializeField] private HighScoreSavingSystem highScoreSavingSystem;
 
     private void Awake()
     {
         Application.targetFrameRate = 60;
+    }
+
+    private void Start()
+    {
+        pauseView.PlayButton.onClick.AddListener(Play);
+        playerController.OnObstacleHitAddListener(GameOver);
+        playerController.OnScoreColliderHitAddListener(pointsController.AddPoints);
+        gameOverView.ScoreBoardButton.onClick.AddListener(scoreboardView.ShowView);
         Pause();
     }
-    public void Play()
+
+    private void Update()
     {
-        score = 0;
-        playButton.SetActive(false);
-        gameOver.SetActive(false);
-        Time.timeScale = 1f;
-        player.enabled = true;
-        PipesController[] pipes = FindObjectsOfType<PipesController>();
+        playerController.UpdateController(pointsController, pipesController);
+    }
+
+    private void Play()
+    {
+        pointsController.ResetScoreAndBombs();
+        gameOverView.HideView();
+        gameView.ShowView();
+        Unpause();
     }
 
     private void Pause()
     {
         Time.timeScale = 0f;
-        player.enabled = false;
+        playerController.DisableController();
+        pauseView.ShowView();
     }
 
-
-    public void GameOver()
+    private void Unpause()
     {
-        gameOver.SetActive(true);
-        playButton.SetActive(true);
-        Pause();
-        pointsController.StopGame();
-        ui.UpdateUI(pointsController.hsc.highscoreList);
+        Time.timeScale = 1f;
+        playerController.EnableController();
+        pauseView.HideView();
+    }
+
+    private void GameOver()
+    {
+        gameView.HideView();
+        playerController.DisableController();
+        pointsController.StopGame(highScoreSavingSystem);
+        Time.timeScale = 0f;
+        gameOverView.ShowView();
+        gameOverView.UpdateScore(pointsController.Score, highScoreSavingSystem.IsHighest);
+        scoreboardView.UpdateBoard(highScoreSavingSystem.HighScoreList);
     }
 }

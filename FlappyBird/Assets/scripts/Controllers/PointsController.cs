@@ -1,22 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PointsController : MonoBehaviour
 {
-    [SerializeField] PointsCounter pointCounter;
-    [SerializeField] HighScoreController highScoreController;
-    [SerializeField] PointHUD pointHUD;
-    [SerializeField] string HighScore;
-    [SerializeField] string gameOne;
-   
+    [SerializeField]
+    private ScoreData scoreDataTemplate;
 
-    public HighScoreController hsc => highScoreController;
+    private int score;
+    private int bombs;
+    public int Bombs => bombs;
+    public int Score => score;
 
-    public void StopGame()
+    [SerializeField] private GameView gameView;
+
+    public void ResetScoreAndBombs()
     {
-        highScoreController.AddHighscoreIfPossible(new HighScoreElements(HighScore,gameOne, pointHUD.Score));
-        pointCounter.StopGame();
-       
+        score = 0;
+        bombs = 0;
+    }
+
+    public void AddPoints()
+    {
+        score++;
+        if (score % 10 == 0 && bombs < 3)
+        {
+            AddBomb();
+            return;
+        }
+        gameView.UpdateUIInfo(score, bombs);
+    }
+
+    private void AddBomb()
+    {
+        bombs++;
+        gameView.UpdateUIInfo(score, bombs);
+    }
+
+    public void RemoveBomb()
+    {
+        bombs--;
+        gameView.UpdateUIInfo(score, bombs);
+    }
+
+    public void StopGame(HighScoreSavingSystem savingSystem)
+    {
+        savingSystem.AddHighscoreIfPossible(new ScoreData(scoreDataTemplate.highscore, scoreDataTemplate.gameOne, score));
     }
 }
